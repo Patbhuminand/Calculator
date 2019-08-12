@@ -7,13 +7,13 @@ import { TextInput } from 'react-native';
 import { Image } from 'react-native';
 
 var count = 0;
-var sum = 0;
 export default class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       output: '0',
-      output2: '',
+      oper: '',
+      save: 0,
     };
   }
 
@@ -21,6 +21,9 @@ export default class Calculator extends React.Component {
     if (ac == 'AC') {
       count = 0;
       this.setState({ output: '0' });
+      this.setState({ output: '0' });
+      this.setState({ oper: '' });
+      this.setState({ save: 0 });
     }
   }
 
@@ -35,41 +38,63 @@ export default class Calculator extends React.Component {
     }
   }
 
-  sum(y) {
-    if (y == '=') {
-      // if (this.state.output.indexOf('÷')) {
-      //   var res = this.state.output.replace('÷', '/');
-      //   console.log('char', res);
-      //   this.setState({ output: eval(res) });
-      // } else if (this.state.output.indexOf('x')) {
-      //   var res2 = this.state.output.replace('x', '*');
-      //   this.setState({ output: eval(res2) });
-      // } else {
-        this.setState({ output: this.state.output });
-    //   }
+  sum() {
+    var ans = 0;
+    switch (this.state.oper) {
+      case 'x':
+        ans = this.state.save * this.state.output;
+        this.setState({ output: ans });
+        break;
+      case '÷':
+        ans = this.state.save / this.state.output;
+        this.setState({ output: ans });
+        break;
+      case '+':
+        var integer = Number(this.state.output);
+        var integer2 = Number(this.state.save);
+        ans = integer2+integer;
+
+        this.setState({ output: ans });
+        break;
+      case '-':
+        ans = this.state.save - this.state.output;
+        this.setState({ output: ans });
+        break;
+      default:
+        break;
     }
   }
 
-  // sign(x) {
-  //   sum = this.state.output;
-  //   this.setState({ sum });
-  //   console.log('character', sum);
-  //   switch (x) {
-  //     case 'x':
-  //       this.setState({ output: this.state.output2 });
-  //       sum = sum * this.state.output;
-  //       this.setState({ output2: sum });
-  //       break;
-  //     case '÷':
-  //       break;
-  //     case '+':
-  //       break;
-  //     case '-':
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
+  sign(x) {
+    switch (x) {
+      case 'x':
+        this.setState({ oper: 'x' });
+        this.setState({ save: this.state.output });
+        this.setState({ output: '' });
+        count = 0;
+        break;
+      case '÷':
+        this.setState({ oper: '÷' });
+        this.setState({ save: this.state.output });
+        this.setState({ output: '' });
+        count = 0;
+        break;
+      case '+':
+        this.setState({ oper: '+' });
+        this.setState({ save: this.state.output });
+        this.setState({ output: '' });
+        count = 0;
+        break;
+      case '-':
+        this.setState({ oper: '-' });
+        this.setState({ save: this.state.output });
+        this.setState({ output: '' });
+        count = 0;
+        break;
+      default:
+        break;
+    }
+  }
 
   render() {
     return (
@@ -77,7 +102,8 @@ export default class Calculator extends React.Component {
         colors={['#000000', '#000000', '#000000']}
         style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.ans}>{''}</Text>
+          <Text>{''}</Text>
+          <Text>{''}</Text>
           <View style={{ flex: 1 }}>
             <Text style={styles.ans}>{' ' + this.state.output}</Text>
             <View
@@ -120,9 +146,7 @@ export default class Calculator extends React.Component {
                   borderRadius: 100,
                   height: 80,
                 }}>
-                <TouchableOpacity
-                  style={styles.btn2}
-                  onPress={() => this.showNum('%')}>
+                <TouchableOpacity style={styles.btn2}>
                   <Text style={styles.black}>%</Text>
                 </TouchableOpacity>
               </View>
@@ -136,7 +160,7 @@ export default class Calculator extends React.Component {
                 }}>
                 <TouchableOpacity
                   style={styles.btn2}
-                  onPress={() => this.showNum('÷')}>
+                  onPress={() => this.sign('÷')}>
                   <Text style={styles.all}>÷</Text>
                 </TouchableOpacity>
               </View>
@@ -199,7 +223,7 @@ export default class Calculator extends React.Component {
                 }}>
                 <TouchableOpacity
                   style={styles.btn2}
-                  onPress={() => this.showNum('x')}>
+                  onPress={() => this.sign('x')}>
                   <Text style={styles.all}>x</Text>
                 </TouchableOpacity>
               </View>
@@ -262,7 +286,7 @@ export default class Calculator extends React.Component {
                 }}>
                 <TouchableOpacity
                   style={styles.btn2}
-                  onPress={() => this.showNum('-')}>
+                  onPress={() => this.sign('-')}>
                   <Text style={styles.all}>-</Text>
                 </TouchableOpacity>
               </View>
@@ -323,7 +347,9 @@ export default class Calculator extends React.Component {
                   borderRadius: 100,
                   height: 80,
                 }}>
-                <TouchableOpacity style={styles.btn2}>
+                <TouchableOpacity
+                  style={styles.btn2}
+                  onPress={() => this.sign('+')}>
                   <Text style={styles.all}>+</Text>
                 </TouchableOpacity>
               </View>
@@ -372,7 +398,7 @@ export default class Calculator extends React.Component {
                 }}>
                 <TouchableOpacity
                   style={styles.btn2}
-                  onPress={() => this.sum('=')}>
+                  onPress={() => this.sum()}>
                   <Text style={styles.all}>=</Text>
                 </TouchableOpacity>
               </View>
@@ -400,7 +426,7 @@ const styles = StyleSheet.create({
   black: {
     textAlign: 'center',
     padding: 26,
-    fontSize: 24,
+    fontSize: 20,
     color: '#000000',
   },
   ans: {
