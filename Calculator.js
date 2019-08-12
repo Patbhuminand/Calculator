@@ -28,7 +28,7 @@ export default class Calculator extends React.Component {
   }
 
   showNum(num) {
-    if (this.state.output == '0'&& num != '.') {
+    if (this.state.output == '0' && num != '.') {
       this.setState({ output: num });
     } else if (num == '.' && count == 0) {
       count = 1;
@@ -47,13 +47,13 @@ export default class Calculator extends React.Component {
         break;
       case '÷':
         ans = this.state.save / this.state.output;
+        ans = ans.toFixed(2);
         this.setState({ output: ans });
         break;
       case '+':
         var integer = Number(this.state.output);
         var integer2 = Number(this.state.save);
-        ans = integer2+integer;
-
+        ans = integer2 + integer;
         this.setState({ output: ans });
         break;
       case '-':
