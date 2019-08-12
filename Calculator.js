@@ -47,7 +47,6 @@ export default class Calculator extends React.Component {
         break;
       case '÷':
         ans = this.state.save / this.state.output;
-        ans = ans.toFixed(2);
         this.setState({ output: ans });
         break;
       case '+':
