@@ -28,7 +28,7 @@ export default class Calculator extends React.Component {
   }
 
   showNum(num) {
-    if (this.state.output == '0') {
+    if (this.state.output == '0'&& num != '.') {
       this.setState({ output: num });
     } else if (num == '.' && count == 0) {
       count = 1;
